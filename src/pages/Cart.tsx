@@ -26,13 +26,9 @@ const Cart: React.FC = () => {
     }, 0);
   }, [cartItems]);
 
-  const shipping = useMemo(() => {
-    return 10.00; // Fixed shipping cost
-  }, []);
+  const shipping = 10.00; // Fixed shipping cost
 
-  const total = useMemo(() => {
-    return subtotal + shipping;
-  }, [subtotal, shipping]);
+  const total = subtotal + shipping;
 
   if (isLoading) {
     return (

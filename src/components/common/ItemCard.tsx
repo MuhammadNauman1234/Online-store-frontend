@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { getImageUrlWithFallback } from '../../utils/imageUtils';
 
 interface ItemCardProps {
@@ -64,4 +64,18 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onAddToCart, onDelete, showDe
   );
 };
 
-export default ItemCard;
+// Memoize ItemCard to prevent unnecessary re-renders when props haven't changed
+// Custom comparison function for optimal performance
+const areEqual = (prevProps: ItemCardProps, nextProps: ItemCardProps) => {
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.item.name === nextProps.item.name &&
+    prevProps.item.price === nextProps.item.price &&
+    prevProps.item.img === nextProps.item.img &&
+    prevProps.showDeleteButton === nextProps.showDeleteButton &&
+    prevProps.onAddToCart === nextProps.onAddToCart &&
+    prevProps.onDelete === nextProps.onDelete
+  );
+};
+
+export default memo(ItemCard, areEqual);

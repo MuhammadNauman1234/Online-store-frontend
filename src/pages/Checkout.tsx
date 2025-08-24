@@ -20,13 +20,12 @@ const Checkout: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  // Memoize calculations to avoid recalculation on every render
+  // Memoize total calculation to avoid recalculation on every render
   const total = useMemo(() => {
     const subtotal = cartItems.reduce((total, item) => {
       return total + (Number(item.price) * item.quantity);
     }, 0);
-    const shipping = 10.00;
-    return subtotal + shipping;
+    return subtotal + 10.00; // Fixed shipping cost
   }, [cartItems]);
 
   // Memoize event handlers to prevent unnecessary re-renders
@@ -55,14 +54,13 @@ const Checkout: React.FC = () => {
     }
   }, [cartItems, total, dispatch]);
 
-  // Memoize other event handlers
-  const handleContinueShopping = useCallback(() => {
+  const handleContinueShopping = () => {
     window.location.href = '/';
-  }, []);
+  };
 
-  const handlePlaceAnotherOrder = useCallback(() => {
+  const handlePlaceAnotherOrder = () => {
     setOrderPlaced(false);
-  }, []);
+  };
 
   if (orderPlaced) {
     return (

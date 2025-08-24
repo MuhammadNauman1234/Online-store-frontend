@@ -51,16 +51,11 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
     }, 0);
   }, [items]);
 
-  const shipping = useMemo(() => {
-    return 10.00; // Fixed shipping cost
-  }, []);
+  const shipping = 10.00; // Fixed shipping cost
 
-  const total = useMemo(() => {
-    return subtotal + shipping;
-  }, [subtotal, shipping]);
+  const total = subtotal + shipping;
 
-  // Memoize event handlers to prevent unnecessary re-renders of child components
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setShippingDetails(prev => ({
       ...prev,
@@ -74,17 +69,13 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         [name]: ''
       }));
     }
-  }, [errors]);
+  };
 
-  // Memoize validation function to prevent recreation on every render
-  const validateForm = useCallback((): boolean => {
+  const validateForm = (): boolean => {
     const newErrors: Partial<ShippingDetails> = {};
 
     if (!shippingDetails.firstName.trim()) {
       newErrors.firstName = 'First name is required';
-    }
-    if (!shippingDetails.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
     }
     if (!shippingDetails.email.trim()) {
       newErrors.email = 'Email is required';
@@ -106,7 +97,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [shippingDetails]);
+  };
 
   // Memoize checkout handler to prevent unnecessary re-renders
   const handleCheckout = useCallback(() => {

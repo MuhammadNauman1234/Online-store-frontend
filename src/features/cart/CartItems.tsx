@@ -75,18 +75,18 @@ const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemove
                   <Button
                     onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                     disabled={item.quantity <= 1}
-                    className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 disabled:opacity-50"
+                    className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 disabled:opacity-50 flex items-center justify-center"
                   >
                     -
                   </Button>
                   
-                  <span className="w-8 text-center font-medium text-gray-700 text-sm">
+                  <span className="w-8 text-center font-medium text-gray-700 text-sm flex items-center justify-center">
                     {item.quantity}
                   </span>
                   
                   <Button
                     onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                    className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600"
+                    className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 flex items-center justify-center"
                   >
                     +
                   </Button>
@@ -136,18 +136,18 @@ const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemove
                 <Button
                   onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                   disabled={item.quantity <= 1}
-                  className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 disabled:opacity-50"
+                  className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 disabled:opacity-50 flex items-center justify-center"
                 >
                   -
                 </Button>
                 
-                <span className="w-12 text-center font-medium text-gray-700">
+                <span className="w-12 text-center font-medium text-gray-700 flex items-center justify-center">
                   {item.quantity}
                 </span>
                 
                 <Button
                   onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600"
+                  className="w-8 h-8 p-0 text-sm bg-gray-500 hover:bg-gray-600 flex items-center justify-center"
                 >
                   +
                 </Button>

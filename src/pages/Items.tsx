@@ -37,13 +37,13 @@ const Items: React.FC = () => {
     }
   }, [dispatch]);
 
-  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  }, []);
+  };
 
-  const clearSearch = useCallback(() => {
+  const clearSearch = () => {
     setSearchTerm('');
-  }, []);
+  };
 
   const handleRetry = useCallback(() => {
     dispatch(clearError());

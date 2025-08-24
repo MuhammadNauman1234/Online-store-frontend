@@ -32,9 +32,9 @@ const AddItem: React.FC = () => {
     }
   }, [dispatch]);
 
-  const handleAddAnother = useCallback(() => {
+  const handleAddAnother = () => {
     setIsSuccess(false);
-  }, []);
+  };
 
   const handleViewItems = useCallback(() => {
     navigate('/items');

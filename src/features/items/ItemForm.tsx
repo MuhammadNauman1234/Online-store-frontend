@@ -24,8 +24,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
   const [errors, setErrors] = useState<Partial<ItemFormData>>({});
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // Memoize event handlers to prevent unnecessary re-renders of child components
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -39,10 +38,9 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
         [name]: ''
       }));
     }
-  }, [errors]);
+  };
 
-  // Memoize file selection handler
-  const handleFileSelect = useCallback((file: File) => {
+  const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setFormData(prev => ({
       ...prev,
@@ -56,10 +54,9 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
         img: ''
       }));
     }
-  }, [errors.img]);
+  };
 
-  // Memoize validation function
-  const validateForm = useCallback((): boolean => {
+  const validateForm = (): boolean => {
     const newErrors: Partial<ItemFormData> = {};
 
     if (!formData.name.trim()) {
@@ -78,7 +75,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData, selectedFile]);
+  };
 
   // Memoize form submission handler
   const handleSubmit = useCallback((e: React.FormEvent) => {
@@ -89,8 +86,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
     }
   }, [validateForm, onSubmit, formData]);
 
-  // Memoize form reset handler
-  const resetForm = useCallback(() => {
+  const resetForm = () => {
     setFormData({
       name: '',
       price: '',
@@ -98,7 +94,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
     });
     setErrors({});
     setSelectedFile(null);
-  }, []);
+  };
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
