@@ -113,5 +113,6 @@ The frontend integrates with a backend API providing:
 - **Async Thunks** - API integration
 
 ---
+## NOTE before running online store frontend, run node.js application provided in ProductBox-Frontend-Challenge also allow cors as well.
 
 Built with ❤️ using modern web technologies
