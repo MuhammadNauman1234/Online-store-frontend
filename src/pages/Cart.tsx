@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CartItems from '../features/cart/CartItems';
 import Button from '../components/common/Button';
@@ -10,13 +10,14 @@ const Cart: React.FC = () => {
   const cartItems = useAppSelector(state => state.cart.items);
   const isLoading = false; // No loading needed with Redux
 
-  const handleUpdateQuantity = (id: number, newQuantity: number) => {
+  // Memoize event handlers to prevent unnecessary re-renders of child components
+  const handleUpdateQuantity = useCallback((id: number, newQuantity: number) => {
     dispatch(updateQuantity({ id, quantity: newQuantity }));
-  };
+  }, [dispatch]);
 
-  const handleRemoveItem = (id: number) => {
+  const handleRemoveItem = useCallback((id: number) => {
     dispatch(removeFromCart(id));
-  };
+  }, [dispatch]);
 
   // Memoize calculations to avoid recalculation on every render
   const subtotal = useMemo(() => {

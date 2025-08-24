@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ItemForm from '../features/items/ItemForm';
 import Button from '../components/common/Button';
@@ -17,7 +17,8 @@ const AddItem: React.FC = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (formData: ItemFormData) => {
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handleSubmit = useCallback(async (formData: ItemFormData) => {
     setIsLoading(true);
     
     try {
@@ -29,15 +30,15 @@ const AddItem: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [dispatch]);
 
-  const handleAddAnother = () => {
+  const handleAddAnother = useCallback(() => {
     setIsSuccess(false);
-  };
+  }, []);
 
-  const handleViewItems = () => {
+  const handleViewItems = useCallback(() => {
     navigate('/items');
-  };
+  }, [navigate]);
 
   if (isSuccess) {
     return (

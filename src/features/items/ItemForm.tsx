@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import InputField from '../../components/common/InputField';
 import FileUpload from '../../components/common/FileUpload';
 import Button from '../../components/common/Button';
@@ -24,7 +24,8 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
   const [errors, setErrors] = useState<Partial<ItemFormData>>({});
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Memoize event handlers to prevent unnecessary re-renders of child components
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -38,9 +39,10 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
         [name]: ''
       }));
     }
-  };
+  }, [errors]);
 
-  const handleFileSelect = (file: File) => {
+  // Memoize file selection handler
+  const handleFileSelect = useCallback((file: File) => {
     setSelectedFile(file);
     setFormData(prev => ({
       ...prev,
@@ -54,9 +56,10 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
         img: ''
       }));
     }
-  };
+  }, [errors.img]);
 
-  const validateForm = (): boolean => {
+  // Memoize validation function
+  const validateForm = useCallback((): boolean => {
     const newErrors: Partial<ItemFormData> = {};
 
     if (!formData.name.trim()) {
@@ -75,17 +78,19 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, selectedFile]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Memoize form submission handler
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
       onSubmit(formData);
     }
-  };
+  }, [validateForm, onSubmit, formData]);
 
-  const resetForm = () => {
+  // Memoize form reset handler
+  const resetForm = useCallback(() => {
     setFormData({
       name: '',
       price: '',
@@ -93,7 +98,7 @@ const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, isLoading = false }) => {
     });
     setErrors({});
     setSelectedFile(null);
-  };
+  }, []);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">

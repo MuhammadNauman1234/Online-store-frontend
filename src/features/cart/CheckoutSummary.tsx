@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
 import { getImageUrl } from '../../utils/imageUtils';
@@ -59,7 +59,8 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
     return subtotal + shipping;
   }, [subtotal, shipping]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Memoize event handlers to prevent unnecessary re-renders of child components
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setShippingDetails(prev => ({
       ...prev,
@@ -73,9 +74,10 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         [name]: ''
       }));
     }
-  };
+  }, [errors]);
 
-  const validateForm = (): boolean => {
+  // Memoize validation function to prevent recreation on every render
+  const validateForm = useCallback((): boolean => {
     const newErrors: Partial<ShippingDetails> = {};
 
     if (!shippingDetails.firstName.trim()) {
@@ -104,20 +106,21 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [shippingDetails]);
 
-  const handleCheckout = () => {
+  // Memoize checkout handler to prevent unnecessary re-renders
+  const handleCheckout = useCallback(() => {
     if (validateForm()) {
       onCheckout(shippingDetails);
     }
-  };
+  }, [validateForm, onCheckout, shippingDetails]);
 
   if (items.length === 0) {
-    return (
+  return (
       <div className="text-center py-8 sm:py-12">
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-4">No items to checkout</h2>
         <p className="text-gray-500 text-sm sm:text-base">Add some items to your cart first!</p>
-      </div>
+    </div>
     );
   }
 

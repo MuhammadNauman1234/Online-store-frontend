@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import Button from '../../components/common/Button';
 import { getImageUrl } from '../../utils/imageUtils';
 
@@ -24,18 +24,19 @@ const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemove
     }, 0);
   }, [items]);
 
-  const handleQuantityChange = (id: number, newQuantity: number) => {
+  // Memoize event handlers to prevent unnecessary re-renders of child components
+  const handleQuantityChange = useCallback((id: number, newQuantity: number) => {
     if (newQuantity >= 1) {
       onUpdateQuantity(id, newQuantity);
     }
-  };
+  }, [onUpdateQuantity]);
 
   if (items.length === 0) {
-    return (
+  return (
       <div className="text-center py-8 sm:py-12">
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-4">Your cart is empty</h2>
         <p className="text-gray-500 text-sm sm:text-base">Add some items to get started!</p>
-      </div>
+    </div>
     );
   }
 

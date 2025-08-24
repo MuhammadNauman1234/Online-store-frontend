@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import ItemList from '../features/items/ItemList';
 import Button from '../components/common/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -26,28 +26,29 @@ const Items: React.FC = () => {
     );
   }, [searchTerm, items]);
 
-  const handleAddToCart = (item: any) => {
+  // Memoize event handlers to prevent unnecessary re-renders of child components
+  const handleAddToCart = useCallback((item: any) => {
     dispatch(addToCart(item));
-  };
+  }, [dispatch]);
 
-  const handleDeleteItem = (id: number) => {
+  const handleDeleteItem = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
       dispatch(deleteItemById(id));
     }
-  };
+  }, [dispatch]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setSearchTerm('');
-  };
+  }, []);
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     dispatch(clearError());
     dispatch(fetchItems());
-  };
+  }, [dispatch]);
 
   if (loading) {
     return (
@@ -61,7 +62,7 @@ const Items: React.FC = () => {
   }
 
   if (error) {
-    return (
+  return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 mb-4">
@@ -75,7 +76,7 @@ const Items: React.FC = () => {
             Try Again
           </Button>
         </div>
-      </div>
+    </div>
     );
   }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import CheckoutSummary from '../features/cart/CheckoutSummary';
 import Button from '../components/common/Button';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
@@ -20,7 +20,17 @@ const Checkout: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const handleCheckout = async (shippingDetails: ShippingDetails) => {
+  // Memoize calculations to avoid recalculation on every render
+  const total = useMemo(() => {
+    const subtotal = cartItems.reduce((total, item) => {
+      return total + (Number(item.price) * item.quantity);
+    }, 0);
+    const shipping = 10.00;
+    return subtotal + shipping;
+  }, [cartItems]);
+
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handleCheckout = useCallback(async (shippingDetails: ShippingDetails) => {
     setIsLoading(true);
     
     try {
@@ -31,7 +41,7 @@ const Checkout: React.FC = () => {
       console.log('Order placed:', {
         items: cartItems,
         shipping: shippingDetails,
-        total: calculateTotal()
+        total: total
       });
       
       // Clear cart after successful order
@@ -43,15 +53,16 @@ const Checkout: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [cartItems, total, dispatch]);
 
-  const calculateTotal = () => {
-    const subtotal = cartItems.reduce((total, item) => {
-      return total + (Number(item.price) * item.quantity);
-    }, 0);
-    const shipping = 10.00;
-    return subtotal + shipping;
-  };
+  // Memoize other event handlers
+  const handleContinueShopping = useCallback(() => {
+    window.location.href = '/';
+  }, []);
+
+  const handlePlaceAnotherOrder = useCallback(() => {
+    setOrderPlaced(false);
+  }, []);
 
   if (orderPlaced) {
     return (
@@ -74,7 +85,7 @@ const Checkout: React.FC = () => {
             
             <div className="space-y-3">
               <p className="text-sm text-gray-500">
-                <span className="font-medium">Order Total:</span> ${calculateTotal().toFixed(2)}
+                <span className="font-medium">Order Total:</span> ${total.toFixed(2)}
               </p>
               <p className="text-sm text-gray-500">
                 <span className="font-medium">Items:</span> {cartItems.length}
@@ -83,14 +94,14 @@ const Checkout: React.FC = () => {
             
             <div className="mt-8 space-y-3">
               <Button 
-                onClick={() => window.location.href = '/'}
+                onClick={handleContinueShopping}
                 className="w-full"
               >
                 Continue Shopping
               </Button>
               
               <Button 
-                onClick={() => setOrderPlaced(false)}
+                onClick={handlePlaceAnotherOrder}
                 className="w-full bg-gray-500 hover:bg-gray-600"
               >
                 Place Another Order
