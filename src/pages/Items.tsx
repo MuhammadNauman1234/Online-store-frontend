@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ItemList from '../features/items/ItemList';
 import Button from '../components/common/Button';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -8,7 +8,6 @@ import { fetchItems, clearError, deleteItemById } from '../store/itemsSlice';
 const Items: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, loading, error } = useAppSelector(state => state.items);
-  const [filteredItems, setFilteredItems] = useState(items);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch items from API
@@ -16,22 +15,15 @@ const Items: React.FC = () => {
     dispatch(fetchItems());
   }, [dispatch]);
 
-  // Update filtered items when items change
-  useEffect(() => {
-    setFilteredItems(items);
-  }, [items]);
-
-  // Filter items based on search term
-  useEffect(() => {
+  // Memoize filtered items to avoid recalculation on every render
+  const filteredItems = useMemo(() => {
     if (searchTerm.trim() === '') {
-      setFilteredItems(items);
-    } else {
-      const filtered = items.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.price.includes(searchTerm)
-      );
-      setFilteredItems(filtered);
+      return items;
     }
+    return items.filter(item =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.price.includes(searchTerm)
+    );
   }, [searchTerm, items]);
 
   const handleAddToCart = (item: any) => {

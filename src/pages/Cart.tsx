@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CartItems from '../features/cart/CartItems';
 import Button from '../components/common/Button';
@@ -18,19 +18,20 @@ const Cart: React.FC = () => {
     dispatch(removeFromCart(id));
   };
 
-  const calculateSubtotal = () => {
+  // Memoize calculations to avoid recalculation on every render
+  const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => {
       return total + (Number(item.price) * item.quantity);
     }, 0);
-  };
+  }, [cartItems]);
 
-  const calculateShipping = () => {
+  const shipping = useMemo(() => {
     return 10.00; // Fixed shipping cost
-  };
+  }, []);
 
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateShipping();
-  };
+  const total = useMemo(() => {
+    return subtotal + shipping;
+  }, [subtotal, shipping]);
 
   if (isLoading) {
     return (
@@ -109,16 +110,16 @@ const Cart: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal ({cartItems.length} items):</span>
-                  <span>${calculateSubtotal().toFixed(2)}</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping:</span>
-                  <span>${calculateShipping().toFixed(2)}</span>
+                  <span>${shipping.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-bold text-gray-800">
                     <span>Total:</span>
-                    <span className="text-green-600">${calculateTotal().toFixed(2)}</span>
+                    <span className="text-green-600">${total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

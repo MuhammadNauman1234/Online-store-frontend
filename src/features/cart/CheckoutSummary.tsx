@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
 import { getImageUrl } from '../../utils/imageUtils';
@@ -44,19 +44,20 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
 
   const [errors, setErrors] = useState<Partial<ShippingDetails>>({});
 
-  const calculateSubtotal = () => {
+  // Memoize all calculations to avoid recalculation on every render
+  const subtotal = useMemo(() => {
     return items.reduce((total, item) => {
       return total + (Number(item.price) * item.quantity);
     }, 0);
-  };
+  }, [items]);
 
-  const calculateShipping = () => {
+  const shipping = useMemo(() => {
     return 10.00; // Fixed shipping cost
-  };
+  }, []);
 
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateShipping();
-  };
+  const total = useMemo(() => {
+    return subtotal + shipping;
+  }, [subtotal, shipping]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -154,15 +155,15 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             <div className="pt-4 space-y-2">
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal:</span>
-                <span>${calculateSubtotal().toFixed(2)}</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Shipping:</span>
-                <span>${calculateShipping().toFixed(2)}</span>
+                <span>${shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-lg font-bold text-gray-800 pt-2 border-t border-gray-200">
                 <span>Total:</span>
-                <span className="text-green-600">${calculateTotal().toFixed(2)}</span>
+                <span className="text-green-600">${total.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -260,7 +261,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             disabled={isLoading}
             className="w-full py-3 text-base sm:text-lg"
           >
-            {isLoading ? 'Processing...' : `Complete Order - $${calculateTotal().toFixed(2)}`}
+            {isLoading ? 'Processing...' : `Complete Order - $${total.toFixed(2)}`}
           </Button>
         </div>
       </div>

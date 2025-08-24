@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Button from '../../components/common/Button';
 import { getImageUrl } from '../../utils/imageUtils';
 
@@ -17,11 +17,12 @@ interface CartItemsProps {
 }
 
 const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemoveItem }) => {
-  const calculateTotal = () => {
+  // Memoize cart total calculation to avoid recalculation on every render
+  const cartTotal = useMemo(() => {
     return items.reduce((total, item) => {
       return total + (Number(item.price) * item.quantity);
     }, 0);
-  };
+  }, [items]);
 
   const handleQuantityChange = (id: number, newQuantity: number) => {
     if (newQuantity >= 1) {
@@ -174,7 +175,7 @@ const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemove
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <div className="flex justify-between items-center text-lg sm:text-xl font-bold text-gray-800">
           <span>Total:</span>
-          <span className="text-green-600">${calculateTotal().toFixed(2)}</span>
+          <span className="text-green-600">${cartTotal.toFixed(2)}</span>
         </div>
       </div>
     </div>
