@@ -73,12 +73,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
         {label}
       </label>
       
       <div
-        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+        className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors ${
           dragActive 
             ? 'border-green-500 bg-green-50' 
             : error 
@@ -99,16 +99,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
         />
         
         {preview ? (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <img 
               src={preview} 
               alt="Preview" 
-              className="mx-auto max-h-48 rounded-lg object-cover"
+              className="mx-auto max-h-32 sm:max-h-48 rounded-lg object-cover"
             />
             <button
               type="button"
               onClick={onButtonClick}
-              className="text-green-600 hover:text-green-700 text-sm font-medium"
+              className="text-green-600 hover:text-green-700 text-xs sm:text-sm font-medium"
             >
               Change Image
             </button>
@@ -116,13 +116,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
         ) : (
           <div className="space-y-4">
             <div className="text-gray-400">
-              <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+              <svg className="mx-auto h-8 w-8 sm:h-12 sm:w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             
             <div className="text-gray-600">
-              <p className="text-lg font-medium">Drop your image here, or</p>
+              <p className="text-base sm:text-lg font-medium">Drop your image here, or</p>
               <button
                 type="button"
                 onClick={onButtonClick}
@@ -132,7 +132,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               </button>
             </div>
             
-            <p className="text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-gray-500">
               PNG, JPG, GIF up to {maxSize}MB
             </p>
           </div>
@@ -140,7 +140,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       </div>
       
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-xs sm:text-sm text-red-600">{error}</p>
       )}
     </div>
   );

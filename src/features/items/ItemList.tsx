@@ -29,17 +29,17 @@ const ItemList: React.FC<ItemListProps> = ({ items, onAddToCart, onDeleteItem, s
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    <div className="container mx-auto px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">
         Our Products
       </h1>
       
       {items.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No items available at the moment.</p>
+        <div className="text-center py-8 sm:py-12">
+          <p className="text-gray-500 text-base sm:text-lg">No items available at the moment.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {items.map((item) => (
             <ItemCard
               key={item.id}

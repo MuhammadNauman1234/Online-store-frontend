@@ -56,7 +56,7 @@ src/
 
 4. **Build for production:**
    ```bash
-   npm run build
+npm run build
    ```
 
 ## 🌐 API Integration
@@ -111,10 +111,6 @@ The frontend integrates with a backend API providing:
 - **Cart Slice** - Shopping cart functionality
 - **Items Slice** - Product data management
 - **Async Thunks** - API integration
-
-## 📄 License
-
-This project is part of an assessment task for Productbox.
 
 ---
 

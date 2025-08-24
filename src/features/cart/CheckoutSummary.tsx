@@ -112,26 +112,26 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   };
 
   if (items.length === 0) {
-  return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold text-gray-600 mb-4">No items to checkout</h2>
-        <p className="text-gray-500">Add some items to your cart first!</p>
-    </div>
+    return (
+      <div className="text-center py-8 sm:py-12">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-4">No items to checkout</h2>
+        <p className="text-gray-500 text-sm sm:text-base">Add some items to your cart first!</p>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">
         Checkout
       </h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         {/* Order Summary */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">Order Summary</h2>
+        <div className="space-y-4 sm:space-y-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Order Summary</h2>
           
-          <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 space-y-3 sm:space-y-4">
             {items.map((item) => (
               <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
                 <div className="flex items-center space-x-3">
@@ -169,10 +169,10 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         </div>
 
         {/* Shipping Details Form */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">Shipping Details</h2>
+        <div className="space-y-4 sm:space-y-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Shipping Details</h2>
           
-          <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField
                 label="First Name"
@@ -258,7 +258,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
           <Button
             onClick={handleCheckout}
             disabled={isLoading}
-            className="w-full py-3 text-lg"
+            className="w-full py-3 text-base sm:text-lg"
           >
             {isLoading ? 'Processing...' : `Complete Order - $${calculateTotal().toFixed(2)}`}
           </Button>

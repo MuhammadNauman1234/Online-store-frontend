@@ -40,20 +40,20 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onAddToCart, onDelete, showDe
         )}
       </div>
       
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+      <div className="p-3 sm:p-4">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
           {item.name}
         </h3>
         
-        <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-green-600">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+          <span className="text-lg sm:text-xl font-bold text-green-600">
             ${item.price}
           </span>
           
           {onAddToCart && (
             <button
               onClick={onAddToCart}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-medium"
+              className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 text-xs sm:text-sm font-medium w-full sm:w-auto"
             >
               Add to Cart
             </button>
