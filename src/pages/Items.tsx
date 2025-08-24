@@ -1,80 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import ItemList from '../features/items/ItemList';
 import Button from '../components/common/Button';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addToCart } from '../store/cartSlice';
-
-interface Item {
-  id: number;
-  name: string;
-  price: string;
-  img: string;
-}
+import { fetchItems, clearError, deleteItemById } from '../store/itemsSlice';
 
 const Items: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [items, setItems] = useState<Item[]>([]);
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const { items, loading, error } = useAppSelector(state => state.items);
+  const [filteredItems, setFilteredItems] = useState(items);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data with 8 items - replace with actual API call
+  // Fetch items from API
   useEffect(() => {
-    const mockItems: Item[] = [
-      {
-        id: 1,
-        name: "King Size Bed",
-        price: "300",
-        img: "./img/bed.jpg"
-      },
-      {
-        id: 2,
-        name: "Modern cookies",
-        price: "450",
-        img: "./img/cookies.jpg"
-      },
-      {
-        id: 3,
-        name: "rack",
-        price: "280",
-        img: "./img/rack.jpg"
-      },
-      {
-        id: 4,
-        name: "slippers",
-        price: "150",
-        img: "./img/slippers.jpg"
-      },
-      {
-        id: 5,
-        name: "sticks",
-        price: "120",
-        img: "./img/sticks.jpg"
-      },
-      {
-        id: 6,
-        name: "Coffee Table",
-        price: "200",
-        img: "./img/coffee-table.jpg"
-      },
-      {
-        id: 7,
-        name: "Floor Lamp",
-        price: "80",
-        img: "./img/lamp.jpg"
-      },
-      {
-        id: 8,
-        name: "Wall Mirror",
-        price: "95",
-        img: "./img/mirror.jpg"
-      }
-    ];
+    dispatch(fetchItems());
+  }, [dispatch]);
 
-    setItems(mockItems);
-    setFilteredItems(mockItems);
-    setIsLoading(false);
-  }, []);
+  // Update filtered items when items change
+  useEffect(() => {
+    setFilteredItems(items);
+  }, [items]);
 
   // Filter items based on search term
   useEffect(() => {
@@ -89,8 +34,14 @@ const Items: React.FC = () => {
     }
   }, [searchTerm, items]);
 
-  const handleAddToCart = (item: Item) => {
+  const handleAddToCart = (item: any) => {
     dispatch(addToCart(item));
+  };
+
+  const handleDeleteItem = (id: number) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+      dispatch(deleteItemById(id));
+    }
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,12 +52,36 @@ const Items: React.FC = () => {
     setSearchTerm('');
   };
 
-  if (isLoading) {
+  const handleRetry = () => {
+    dispatch(clearError());
+    dispatch(fetchItems());
+  };
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading items...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Items</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={handleRetry}>
+            Try Again
+          </Button>
         </div>
       </div>
     );
@@ -199,6 +174,8 @@ const Items: React.FC = () => {
           <ItemList 
             items={filteredItems} 
             onAddToCart={handleAddToCart}
+            onDeleteItem={handleDeleteItem}
+            showDeleteButton={true}
           />
         )}
       </div>

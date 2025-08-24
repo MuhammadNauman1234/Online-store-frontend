@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../components/common/Button';
+import { getImageUrl } from '../../utils/imageUtils';
 
 interface CartItem {
   id: number;
@@ -47,7 +48,7 @@ const CartItems: React.FC<CartItemsProps> = ({ items, onUpdateQuantity, onRemove
             {/* Item Image */}
             <div className="flex-shrink-0">
               <img 
-                src={item.img} 
+                src={getImageUrl(item.img)} 
                 alt={item.name}
                 className="w-20 h-20 object-cover rounded-lg"
               />

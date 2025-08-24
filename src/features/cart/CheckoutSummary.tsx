@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
+import { getImageUrl } from '../../utils/imageUtils';
 
 interface CartItem {
   id: number;
@@ -135,7 +136,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
               <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
                 <div className="flex items-center space-x-3">
                   <img 
-                    src={item.img} 
+                    src={getImageUrl(item.img)} 
                     alt={item.name}
                     className="w-12 h-12 object-cover rounded"
                   />

@@ -11,12 +11,20 @@ interface Item {
 interface ItemListProps {
   items: Item[];
   onAddToCart?: (item: Item) => void;
+  onDeleteItem?: (id: number) => void;
+  showDeleteButton?: boolean;
 }
 
-const ItemList: React.FC<ItemListProps> = ({ items, onAddToCart }) => {
+const ItemList: React.FC<ItemListProps> = ({ items, onAddToCart, onDeleteItem, showDeleteButton = false }) => {
   const handleAddToCart = (item: Item) => {
     if (onAddToCart) {
       onAddToCart(item);
+    }
+  };
+
+  const handleDelete = (id: number) => {
+    if (onDeleteItem) {
+      onDeleteItem(id);
     }
   };
 
@@ -37,6 +45,8 @@ const ItemList: React.FC<ItemListProps> = ({ items, onAddToCart }) => {
               key={item.id}
               item={item}
               onAddToCart={() => handleAddToCart(item)}
+              onDelete={() => handleDelete(item.id)}
+              showDeleteButton={showDeleteButton}
             />
           ))}
         </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ItemForm from '../features/items/ItemForm';
 import Button from '../components/common/Button';
+import { useAppDispatch } from '../store/hooks';
+import { createItem } from '../store/itemsSlice';
 
 interface ItemFormData {
   name: string;
@@ -11,6 +13,7 @@ interface ItemFormData {
 
 const AddItem: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,17 +21,11 @@ const AddItem: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // TODO: Send item data to backend
-      console.log('Adding new item:', formData);
-      
-      // Show success state
+      await dispatch(createItem(formData)).unwrap();
       setIsSuccess(true);
     } catch (error) {
       console.error('Failed to add item:', error);
-      // TODO: Handle error state
+      // Error is handled by Redux state
     } finally {
       setIsLoading(false);
     }
